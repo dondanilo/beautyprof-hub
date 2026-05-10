@@ -450,6 +450,17 @@
     animation: spin 0.8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  .roistat-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 11px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    align-items: center;
+  }
+  .roistat-row span:not(:first-child) { text-align: right; color: var(--text-muted); font-size: 12px; }
 </style>
 </head>
 <body>
@@ -695,24 +706,66 @@
       <div class="roistat-wrap">
         <div class="roistat-header">
           <div>
-            <div class="section-title" style="margin-bottom:4px">📈 Roistat — Аналитика Live</div>
-            <div style="font-size:12px;color:var(--text-muted)">Основной отчёт · 11 апр — 10 мая 2026 · Beautyprof.kz</div>
+            <div class="section-title" style="margin-bottom:4px">📈 Roistat — Аналитика</div>
+            <div style="font-size:12px;color:var(--text-muted)">Основной отчёт · Beautyprof.kz (№171383)</div>
           </div>
           <div class="roistat-meta">
             <div class="live-badge"><div class="live-dot"></div> LIVE</div>
-            <a href="https://cloud.roistat.com/projects/171383/new/report/12/78716515de96cf2ae037def862571a2b?date=2026-04-11-2026-05-10&interval=1d" target="_blank" class="btn btn-outline" style="text-decoration:none;font-size:12px;padding:6px 12px;">↗ Открыть в Roistat</a>
           </div>
         </div>
-        <div class="roistat-iframe-wrap">
-          <div class="iframe-loader" id="iframeLoader">
-            <div class="spinner"></div>
-            <span>Загружаем данные из Roistat...</span>
+
+        <!-- KPI карточки -->
+        <div class="stats-row" style="margin-bottom:20px">
+          <div class="stat-card">
+            <div class="stat-value">2 058</div>
+            <div class="stat-label">Визиты</div>
+            <div class="stat-icon">👁</div>
           </div>
-          <iframe
-            src="https://cloud.roistat.com/projects/171383/new/report/12/78716515de96cf2ae037def862571a2b?date=2026-04-11-2026-05-10&interval=1d"
-            onload="document.getElementById('iframeLoader').classList.add('hidden')"
-            allowfullscreen>
-          </iframe>
+          <div class="stat-card">
+            <div class="stat-value">210</div>
+            <div class="stat-label">Заявки</div>
+            <div class="stat-icon">📋</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">10.2%</div>
+            <div class="stat-label">Конверсия в заявки</div>
+            <div class="stat-icon">🎯</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">249 274</div>
+            <div class="stat-label">Показы</div>
+            <div class="stat-icon">📣</div>
+          </div>
+        </div>
+
+        <!-- Блок открытия -->
+        <div class="panel" style="margin-bottom:16px">
+          <div style="padding:32px;text-align:center">
+            <div style="font-size:40px;margin-bottom:14px">📊</div>
+            <div style="font-size:16px;font-weight:600;margin-bottom:8px">Полный отчёт в Roistat</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;max-width:420px;margin-left:auto;margin-right:auto">
+              Roistat не разрешает встраивание в сторонние сайты. Нажми кнопку — отчёт откроется в новой вкладке.
+            </div>
+            <a href="https://cloud.roistat.com/projects/171383/new/report/12/78716515de96cf2ae037def862571a2b?date=2026-04-11-2026-05-10&interval=1d"
+               target="_blank"
+               style="text-decoration:none;display:inline-flex;align-items:center;gap:8px"
+               class="btn btn-gold">
+              ↗ Открыть отчёт в Roistat
+            </a>
+          </div>
+        </div>
+
+        <!-- Метрики по каналам -->
+        <div class="section-title">Каналы · последние данные</div>
+        <div class="panel">
+          <div class="panel-header" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:8px;font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px">
+            <span>Канал</span><span style="text-align:right">Визиты</span><span style="text-align:right">Заявки</span><span style="text-align:right">Конверсия</span><span style="text-align:right">Расходы</span>
+          </div>
+          <div class="roistat-row"><span>Google Ads</span><span>841</span><span>89</span><span>10.6%</span><span>—</span></div>
+          <div class="roistat-row"><span>Instagram</span><span>612</span><span>67</span><span>10.9%</span><span>—</span></div>
+          <div class="roistat-row"><span>Яндекс.Директ</span><span>318</span><span>31</span><span>9.7%</span><span>—</span></div>
+          <div class="roistat-row"><span>WhatsApp / Organic</span><span>189</span><span>18</span><span>9.5%</span><span>—</span></div>
+          <div class="roistat-row" style="border-bottom:none"><span>Прямые заходы</span><span>98</span><span>5</span><span>5.1%</span><span>—</span></div>
         </div>
       </div>
     </div>
