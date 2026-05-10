@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BeautyProf Hub — Внутренний портал</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── DARK THEME (default) ── */
+  :root, [data-theme="dark"] {
+    --sidebar-bg:   #1A1B23;
+    --page-bg:      #0F1117;
+    --card-bg:      #1E1F2B;
+    --dark3:        #22232E;
+    --topbar-bg:    #0F1117;
+    --gold:         #C9A84C;
+    --gold-light:   #E4C16F;
+    --gold-dim:     rgba(201,168,76,0.12);
+    --text:         #F0F0F5;
+    --text-muted:   #8B8CA0;
+    --border:       rgba(255,255,255,0.07);
+    --input-bg:     #1A1B23;
+    --hover-bg:     #22232E;
+    --tag-bg:       #22232E;
+    --logo-filter:  brightness(0) invert(1);   /* белый логотип на тёмном */
+    --shadow:       0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  /* ── LIGHT THEME ── */
+  [data-theme="light"] {
+    --sidebar-bg:   #FFFFFF;
+    --page-bg:      #F4F5F7;
+    --card-bg:      #FFFFFF;
+    --dark3:        #F0F1F5;
+    --topbar-bg:    #FFFFFF;
+    --gold:         #A67C20;
+    --gold-light:   #C9A84C;
+    --gold-dim:     rgba(166,124,32,0.10);
+    --text:         #111827;
+    --text-muted:   #6B7280;
+    --border:       rgba(0,0,0,0.08);
+    --input-bg:     #F4F5F7;
+    --hover-bg:     #F0F1F5;
+    --tag-bg:       #F0F1F5;
+    --logo-filter:  none;                      /* оригинальный логотип */
+    --shadow:       0 8px 24px rgba(0,0,0,0.10);
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--page-bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    transition: background 0.25s, color 0.25s;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--dark3); border-radius: 4px; }
+
+  /* brand */
+  .brand {
+    padding: 22px 20px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand-logo-img {
+    height: 36px;
+    width: auto;
+    filter: var(--logo-filter);
+    transition: filter 0.25s;
+    display: block;
+  }
+  .brand-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    letter-spacing: 0.1px;
+  }
+
+  /* nav */
+  .nav-section { padding: 14px 12px 0; }
+  .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    padding: 0 8px;
+    margin-bottom: 5px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    margin-bottom: 2px;
+    font-size: 13.5px;
+    color: var(--text-muted);
+  }
+  .nav-item:hover { background: var(--hover-bg); color: var(--text); }
+  .nav-item.active { background: var(--gold-dim); color: var(--gold-light); font-weight: 500; }
+  .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--tag-bg);
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
+  .nav-item.active .nav-badge { background: var(--gold-dim); color: var(--gold); }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 14px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .user-card { display: flex; align-items: center; gap: 10px; }
+  .user-avatar {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, #5B9BD5, #4CAF82);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+  .user-name { font-size: 13px; font-weight: 500; }
+  .user-role { font-size: 11px; color: var(--text-muted); }
+
+  /* ── MAIN ── */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  .topbar {
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 14px;
+    background: var(--topbar-bg);
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .page-title { font-size: 15px; font-weight: 600; flex: 1; }
+
+  .search-wrap { position: relative; flex: 1; max-width: 360px; }
+  .search-icon {
+    position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); font-size: 13px; pointer-events: none;
+  }
+  .search-input {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: inherit; font-size: 13px;
+    padding: 8px 12px 8px 34px;
+    outline: none;
+    transition: border-color 0.15s, background 0.25s;
+  }
+  .search-input::placeholder { color: var(--text-muted); }
+  .search-input:focus { border-color: var(--gold); }
+
+  .topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+  /* theme toggle */
+  .theme-toggle {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--input-bg);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: all 0.15s;
+    color: var(--text-muted);
+  }
+  .theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
+
+  .btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border-radius: 8px;
+    font-family: inherit; font-size: 13px; font-weight: 500;
+    cursor: pointer; border: none; transition: all 0.15s;
+  }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: #0F1117; font-weight: 600;
+  }
+  .btn-gold:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,168,76,0.25); }
+
+  /* ── CONTENT ── */
+  .content-area {
+    flex: 1; overflow-y: auto; padding: 26px 28px;
+  }
+  .content-area::-webkit-scrollbar { width: 6px; }
+  .content-area::-webkit-scrollbar-thumb { background: var(--dark3); border-radius: 4px; }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── STATS ── */
+  .stats-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+    margin-bottom: 26px;
+  }
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
+    position: relative; overflow: hidden;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  }
+  .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 3px; }
+  .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .stat-icon { position: absolute; top: 16px; right: 16px; font-size: 20px; opacity: 0.2; }
+
+  /* ── SECTIONS GRID ── */
+  .section-title {
+    font-size: 13px; font-weight: 600; color: var(--text);
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-title-badge {
+    background: var(--tag-bg); color: var(--text-muted);
+    font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 500;
+  }
+
+  .sections-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-bottom: 26px;
+  }
+  .section-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .section-card:hover {
+    border-color: rgba(201,168,76,0.35);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .section-card-icon { font-size: 22px; margin-bottom: 10px; }
+  .section-card-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .section-card-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
+  .section-card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
+  }
+  .doc-count { font-size: 11px; color: var(--text-muted); }
+  .doc-count span { color: var(--gold); font-weight: 600; }
+  .arrow { color: var(--text-muted); font-size: 12px; transition: all 0.15s; }
+  .section-card:hover .arrow { transform: translateX(3px); color: var(--gold); }
+
+  /* ── 2-COL ── */
+  .grid-2col { display: grid; grid-template-columns: 1.5fr 1fr; gap: 18px; margin-bottom: 24px; }
+
+  /* ── PANEL ── */
+  .panel {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .panel-header {
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    font-size: 13px; font-weight: 600;
+  }
+
+  /* doc list */
+  .doc-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 20px; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.15s;
+  }
+  .doc-item:last-child { border-bottom: none; }
+  .doc-item:hover { background: var(--hover-bg); }
+  .doc-type {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .doc-type.md   { background: rgba(91,155,213,0.15); }
+  .doc-type.pdf  { background: rgba(228,80,80,0.12); }
+  .doc-type.xlsx { background: rgba(76,175,130,0.12); }
+  .doc-type.docx { background: rgba(91,155,213,0.10); }
+  .doc-info { flex: 1; min-width: 0; }
+  .doc-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .doc-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .doc-tag {
+    font-size: 10px; padding: 3px 8px; border-radius: 20px;
+    font-weight: 500; flex-shrink: 0;
+  }
+  .tag-sales { background: rgba(228,144,76,0.12); color: #E4904C; }
+  .tag-mkt   { background: rgba(91,155,213,0.12); color: #5B9BD5; }
+  .tag-hr    { background: rgba(76,175,130,0.12); color: #4CAF82; }
+  .tag-strat { background: var(--gold-dim); color: var(--gold); }
+
+  /* quick links */
+  .quick-links { display: grid; gap: 8px; }
+  .quick-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 14px; background: var(--dark3); border-radius: 8px;
+    cursor: pointer; transition: all 0.15s;
+    font-size: 13px; color: var(--text-muted);
+  }
+  .quick-link:hover { background: var(--gold-dim); color: var(--gold-light); }
+
+  /* ── SECTION VIEW ── */
+  .breadcrumb {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-muted); margin-bottom: 18px;
+  }
+  .breadcrumb a { color: var(--text-muted); cursor: pointer; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb-current { color: var(--text); font-weight: 500; }
+
+  .section-hero {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 14px; padding: 26px; margin-bottom: 22px;
+    display: flex; align-items: flex-start; gap: 18px;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .section-hero-icon {
+    width: 54px; height: 54px; background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.2); border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; flex-shrink: 0;
+  }
+  .section-hero-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .section-hero-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.65; max-width: 580px; }
+  .section-hero-meta { margin-top: 12px; display: flex; gap: 16px; }
+  .hero-meta-item { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+  .hero-meta-item span { color: var(--gold); font-weight: 600; }
+
+  /* doc grid */
+  .doc-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px;
+  }
+  .doc-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .doc-card:hover {
+    border-color: rgba(201,168,76,0.3); transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .doc-card-icon { font-size: 26px; margin-bottom: 10px; }
+  .doc-card-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+  .doc-card-meta { font-size: 11px; color: var(--text-muted); }
+  .doc-card-ext {
+    display: inline-block; margin-top: 8px;
+    font-size: 10px; font-weight: 700; padding: 2px 7px;
+    border-radius: 4px; background: var(--dark3); color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .doc-card-ext.md   { color: #5B9BD5; }
+  .doc-card-ext.pdf  { color: #E45050; }
+  .doc-card-ext.xlsx { color: #4CAF82; }
+  .doc-card-ext.docx { color: #7B9ED9; }
+
+  /* search */
+  .search-header { margin-bottom: 18px; font-size: 13px; color: var(--text-muted); }
+  .search-header strong { color: var(--gold); }
+  mark { background: rgba(201,168,76,0.25); color: var(--gold-light); border-radius: 2px; padding: 0 2px; }
+
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-text { font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="brand">
+    <img src="logo.png" alt="BeautyProf" class="brand-logo-img">
+    <div class="brand-sub">Внутренний портал · Knowledge Hub</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Главное</div>
+    <div class="nav-item active" onclick="showDashboard(this)">
+      <span class="nav-icon">⊞</span> Дашборд
+    </div>
+  </div>
+
+  <div class="nav-section" style="margin-top:6px;">
+    <div class="nav-label">Разделы</div>
+    <div class="nav-item" onclick="showSection('strategy',this)"><span class="nav-icon">🎯</span> Стратегия <span class="nav-badge">4</span></div>
+    <div class="nav-item" onclick="showSection('knowledge',this)"><span class="nav-icon">📚</span> База знаний <span class="nav-badge">12</span></div>
+    <div class="nav-item" onclick="showSection('budget',this)"><span class="nav-icon">💰</span> Бюджеты <span class="nav-badge">3</span></div>
+    <div class="nav-item" onclick="showSection('sales',this)"><span class="nav-icon">🤝</span> Продажи <span class="nav-badge">8</span></div>
+    <div class="nav-item" onclick="showSection('marketing',this)"><span class="nav-icon">📣</span> Маркетинг <span class="nav-badge">10</span></div>
+    <div class="nav-item" onclick="showSection('analytics',this)"><span class="nav-icon">📊</span> Аналитика <span class="nav-badge">5</span></div>
+    <div class="nav-item" onclick="showSection('onboarding',this)"><span class="nav-icon">🚀</span> Онбординг <span class="nav-badge">6</span></div>
+    <div class="nav-item" onclick="showSection('ai',this)"><span class="nav-icon">🤖</span> AI Context <span class="nav-badge">8</span></div>
+    <div class="nav-item" onclick="showSection('contracts',this)"><span class="nav-icon">📝</span> Договоры <span class="nav-badge">4</span></div>
+    <div class="nav-item" onclick="showSection('brand',this)"><span class="nav-icon">✨</span> Бренд <span class="nav-badge">6</span></div>
+    <div class="nav-item" onclick="showSection('operations',this)"><span class="nav-icon">⚙️</span> Операции <span class="nav-badge">5</span></div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar">BP</div>
+      <div>
+        <div class="user-name">BeautyProf Team</div>
+        <div class="user-role">Внутренний доступ</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="page-title" id="pageTitle">Дашборд</div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" type="text" placeholder="Поиск по хабу..." id="searchInput" oninput="handleSearch(this.value)">
+    </div>
+    <div class="topbar-actions">
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Переключить тему">🌙</button>
+      <button class="btn btn-outline">📤 Экспорт</button>
+      <button class="btn btn-gold">+ Добавить</button>
+    </div>
+  </div>
+
+  <div class="content-area">
+
+    <!-- DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-value">71</div>
+          <div class="stat-label">Всего документов</div>
+          <div class="stat-icon">📄</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">11</div>
+          <div class="stat-label">Разделов</div>
+          <div class="stat-icon">📁</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">3</div>
+          <div class="stat-label">Обновлений за неделю</div>
+          <div class="stat-icon">🔄</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">2</div>
+          <div class="stat-label">Города присутствия</div>
+          <div class="stat-icon">📍</div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        Разделы хаба <span class="section-title-badge">11 разделов</span>
+      </div>
+
+      <div class="sections-grid">
+        <div class="section-card" onclick="showSection('strategy',null)">
+          <div class="section-card-icon">🎯</div>
+          <div class="section-card-name">01 · Стратегия</div>
+          <div class="section-card-desc">Позиционирование, цели компании, конкурентный анализ</div>
+          <div class="section-card-footer"><div class="doc-count"><span>4</span> документа</div><div class="arrow">→</div></div>
+        </div>
+        <div class="section-card" onclick="showSection('knowledge',null)">
+          <div class="section-card-icon">📚</div>
+          <div class="section-card-name">02 · База знаний</div>
+          <div class="section-card-desc">Клиенты, аудитории, продукты, поставщики, команда</div>
+          <div class="section-card-footer"><div class="doc-count"><span>12</span> документов</div><div class="arrow">→</div></div>
+        </div>
+        <div class="section-card" onclick="showSection('budget',null)">
+          <div class="section-card-icon">💰</div>
+          <div class="section-card-name">03 · Бюджеты</div>
+          <div class="section-card-desc">Финансовое планирование и расходы по направлениям</div>
+          <div class="section-card-footer"><div class="doc-count"><span>3</span> документа</div><div class="arrow">→</div></div>
+        </div>
+        <div class="section-card" onclick="showSection('sales',null)">
+          <div class="section-card-icon">🤝</div>
+          <div class="section-card-name">04 · Продажи</div>
+          <div class="section-card-desc">Скрипты, КП, работа с возражениями, прайсы</div>
+          <div class="section-card-footer"><div class="doc-count"><span>8</span> документов</div><div class="arrow">→</div></div>
+        </div>
+        <div class="section-card" onclick="showSection('marketing',null)">
+          <div class="section-card-icon">📣</div>
+          <div class="section-card-name">05 · Маркетинг</div>
+          <div class="section-card-desc">Кампании, контент, соцсети, шаблоны рассылок</div>
+          <div class="section-card-footer"><div class="doc-count"><span>10</span> документов</div><div class="arrow">→</div></div>
+        </div>
+        <div class="section-card" onclick="showSection('analytics',null)">
+          <div class="section-card-icon">📊</div>
+          <div class="section-card-name">06 · Аналитика</div>
+          <div class="section-card-desc">Отчёты по продажам, воронка лидов, метрики</div>
+          <div class="section-card-footer"><div class="doc-count"><span>5</span> документов</div><div class="arrow">→</div></div>
+        </div>
+        <div class="section-card" onclick="showSection('onboarding',null)">
+          <div class="section-card-icon">🚀</div>
+          <div class="section-card-name">07 · Онбординг</div>
+          <div class="section-card-desc">Welcome Book, гайды для новых сотрудников по ролям</div>
+          <div class="section-card-footer"><div class="doc-count"><span>6</span> документов</div><div class="arrow">→</div></div>
+        </div>
+        <div class="section-card" onclick="showSection('ai',null)">
+          <div class="section-card-icon">🤖</div>
+          <div class="section-card-name">08 · AI Context</div>
+          <div class="section-card-desc">Структурированные данные о компании для AI-инструментов</div>
+          <div class="section-card-footer"><div class="doc-count"><span>8</span> документов</div><div class="arrow">→</div></div>
+        </div>
+        <div class="section-card" onclick="showSection('contracts',null)">
+          <div class="section-card-icon">📝</div>
+          <div class="section-card-name">09 · Договоры</div>
+          <div class="section-card-desc">Шаблоны договоров, актов и соглашений</div>
+          <div class="section-card-footer"><div class="doc-count"><span>4</span> документа</div><div class="arrow">→</div></div>
+        </div>
+        <div class="section-card" onclick="showSection('brand',null)">
+          <div class="section-card-icon">✨</div>
+          <div class="section-card-name">10 · Бренд</div>
+          <div class="section-card-desc">Брендбук, логотипы, фирменный стиль, гайдлайны</div>
+          <div class="section-card-footer"><div class="doc-count"><span>6</span> документов</div><div class="arrow">→</div></div>
+        </div>
+        <div class="section-card" onclick="showSection('operations',null)">
+          <div class="section-card-icon">⚙️</div>
+          <div class="section-card-name">11 · Операции</div>
+          <div class="section-card-desc">Регламенты, процессы, чек-листы, работа с CRM</div>
+          <div class="section-card-footer"><div class="doc-count"><span>5</span> документов</div><div class="arrow">→</div></div>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <div class="panel">
+          <div class="panel-header">📄 Последние документы</div>
+          <div class="doc-item">
+            <div class="doc-type md">📝</div>
+            <div class="doc-info">
+              <div class="doc-name">Скрипт холодного звонка — Алматы</div>
+              <div class="doc-meta">04_Sales / Scripts · 2 дня назад</div>
+            </div>
+            <span class="doc-tag tag-sales">Продажи</span>
+          </div>
+          <div class="doc-item">
+            <div class="doc-type md">📝</div>
+            <div class="doc-info">
+              <div class="doc-name">Контент-план Instagram май 2026</div>
+              <div class="doc-meta">05_Marketing / Content · 3 дня назад</div>
+            </div>
+            <span class="doc-tag tag-mkt">Маркетинг</span>
+          </div>
+          <div class="doc-item">
+            <div class="doc-type pdf">📄</div>
+            <div class="doc-info">
+              <div class="doc-name">Welcome Book BeautyProf 2026</div>
+              <div class="doc-meta">07_Onboarding · 5 дней назад</div>
+            </div>
+            <span class="doc-tag tag-hr">HR</span>
+          </div>
+          <div class="doc-item">
+            <div class="doc-type xlsx">📊</div>
+            <div class="doc-info">
+              <div class="doc-name">Прайс-лист оборудование Q2 2026</div>
+              <div class="doc-meta">04_Sales / Pricing · 1 неделю назад</div>
+            </div>
+            <span class="doc-tag tag-sales">Продажи</span>
+          </div>
+          <div class="doc-item">
+            <div class="doc-type md">📝</div>
+            <div class="doc-info">
+              <div class="doc-name">Стратегия BeautyProf 2026</div>
+              <div class="doc-meta">01_Strategy · 1 неделю назад</div>
+            </div>
+            <span class="doc-tag tag-strat">Стратегия</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-title" style="margin-bottom:12px">⚡ Быстрый доступ</div>
+          <div class="quick-links">
+            <div class="quick-link" onclick="showSection('onboarding',null)"><span>🚀</span> Welcome Book нового сотрудника</div>
+            <div class="quick-link" onclick="showSection('sales',null)"><span>📞</span> Скрипты продаж</div>
+            <div class="quick-link" onclick="showSection('marketing',null)"><span>💬</span> Шаблоны WhatsApp-рассылок</div>
+            <div class="quick-link" onclick="showSection('knowledge',null)"><span>💄</span> Каталог оборудования</div>
+            <div class="quick-link" onclick="showSection('ai',null)"><span>🤖</span> AI-контекст компании</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION VIEW -->
+    <div class="view" id="view-section">
+      <div class="breadcrumb">
+        <a onclick="showDashboard(null)">🏠 Хаб</a>
+        <span style="opacity:.4">/</span>
+        <span class="breadcrumb-current" id="breadcrumbCurrent">—</span>
+      </div>
+      <div class="section-hero">
+        <div class="section-hero-icon" id="sectionHeroIcon">📁</div>
+        <div>
+          <div class="section-hero-title" id="sectionHeroTitle">—</div>
+          <div class="section-hero-desc" id="sectionHeroDesc">—</div>
+          <div class="section-hero-meta">
+            <div class="hero-meta-item">📄 Документов: <span id="sectionDocCount">—</span></div>
+            <div class="hero-meta-item">🔄 Обновлён: <span>10 мая 2026</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="section-title">Документы раздела</div>
+      <div class="doc-grid" id="sectionDocGrid"></div>
+    </div>
+
+    <!-- SEARCH VIEW -->
+    <div class="view" id="view-search">
+      <div class="search-header" id="searchHeader"></div>
+      <div id="searchResults"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const SECTIONS = {
+  strategy: {
+    icon:'🎯', title:'01 · Стратегия',
+    desc:'Долгосрочные цели компании, позиционирование на рынке Казахстана, конкурентный анализ и ключевые приоритеты.',
+    docs:[
+      {name:'Стратегия BeautyProf 2026',ext:'md',icon:'📋',date:'01 мая 2026'},
+      {name:'Позиционирование и УТП',ext:'md',icon:'🎯',date:'15 апр 2026'},
+      {name:'Конкурентный анализ рынка КЗ',ext:'md',icon:'🔍',date:'10 апр 2026'},
+      {name:'Цели и KPI 2026',ext:'xlsx',icon:'📊',date:'01 апр 2026'},
+    ]
+  },
+  knowledge: {
+    icon:'📚', title:'02 · База знаний',
+    desc:'Центральная база данных о клиентах, целевых аудиториях, продуктах, поставщиках и команде.',
+    docs:[
+      {name:'Портрет клиента — владелец салона',ext:'md',icon:'👤',date:'05 мая 2026'},
+      {name:'Каталог оборудования и описания',ext:'md',icon:'💄',date:'28 апр 2026'},
+      {name:'База поставщиков и контакты',ext:'md',icon:'🏭',date:'20 апр 2026'},
+      {name:'Структура команды Алматы',ext:'md',icon:'👥',date:'15 апр 2026'},
+      {name:'Структура команды Астана',ext:'md',icon:'👥',date:'15 апр 2026'},
+      {name:'Аудитория: косметологи',ext:'md',icon:'💉',date:'10 апр 2026'},
+      {name:'Аудитория: SPA-директора',ext:'md',icon:'🛁',date:'10 апр 2026'},
+      {name:'Клиентские кейсы и отзывы',ext:'md',icon:'⭐',date:'05 апр 2026'},
+      {name:'FAQ по продуктам',ext:'md',icon:'❓',date:'01 апр 2026'},
+      {name:'WA/TG Шаблоны сообщений',ext:'md',icon:'💬',date:'25 мар 2026'},
+      {name:'Процессы отдела продаж',ext:'md',icon:'🔄',date:'20 мар 2026'},
+      {name:'Региональная специфика КЗ',ext:'md',icon:'🇰🇿',date:'15 мар 2026'},
+    ]
+  },
+  budget: {
+    icon:'💰', title:'03 · Бюджеты',
+    desc:'Финансовое планирование, распределение бюджетов по направлениям и контроль расходов.',
+    docs:[
+      {name:'Бюджет маркетинг Q2 2026',ext:'xlsx',icon:'📊',date:'01 апр 2026'},
+      {name:'Расходы по направлениям',ext:'xlsx',icon:'💹',date:'01 апр 2026'},
+      {name:'Планирование рекламного бюджета',ext:'md',icon:'📋',date:'25 мар 2026'},
+    ]
+  },
+  sales: {
+    icon:'🤝', title:'04 · Продажи',
+    desc:'Всё для отдела продаж: скрипты звонков, коммерческие предложения, работа с возражениями, прайс-листы.',
+    docs:[
+      {name:'Скрипт холодного звонка — Алматы',ext:'md',icon:'📞',date:'08 мая 2026'},
+      {name:'Скрипт входящего обращения',ext:'md',icon:'📱',date:'05 мая 2026'},
+      {name:'Работа с возражениями',ext:'md',icon:'💬',date:'01 мая 2026'},
+      {name:'КП — Салон под ключ',ext:'docx',icon:'📄',date:'25 апр 2026'},
+      {name:'КП — Косметологический кабинет',ext:'docx',icon:'📄',date:'20 апр 2026'},
+      {name:'Прайс-лист оборудование Q2 2026',ext:'xlsx',icon:'💰',date:'01 апр 2026'},
+      {name:'Условия рассрочки и оплаты',ext:'md',icon:'🏦',date:'25 мар 2026'},
+      {name:'Этапы сделки в CRM',ext:'md',icon:'🔄',date:'20 мар 2026'},
+    ]
+  },
+  marketing: {
+    icon:'📣', title:'05 · Маркетинг',
+    desc:'Маркетинговые кампании, контент-планы, шаблоны для соцсетей и мессенджеров.',
+    docs:[
+      {name:'Контент-план Instagram май 2026',ext:'md',icon:'📸',date:'07 мая 2026'},
+      {name:'Контент-план TikTok май 2026',ext:'md',icon:'🎬',date:'06 мая 2026'},
+      {name:'Шаблоны WhatsApp-рассылок',ext:'md',icon:'💬',date:'03 мая 2026'},
+      {name:'Кампания «Салон под ключ»',ext:'md',icon:'🏪',date:'28 апр 2026'},
+      {name:'Email-рассылка: новинки',ext:'md',icon:'✉️',date:'20 апр 2026'},
+      {name:'Рекламные тексты — Instagram',ext:'md',icon:'✍️',date:'15 апр 2026'},
+      {name:'Гайд по визуальному стилю постов',ext:'pdf',icon:'🎨',date:'10 апр 2026'},
+      {name:'Сезонные акции 2026',ext:'md',icon:'🎁',date:'05 апр 2026'},
+      {name:'Партнёрские активации',ext:'md',icon:'🤝',date:'01 апр 2026'},
+      {name:'UTM-метки и трекинг',ext:'md',icon:'🔗',date:'25 мар 2026'},
+    ]
+  },
+  analytics: {
+    icon:'📊', title:'06 · Аналитика',
+    desc:'Отчёты по продажам, воронка лидов, ключевые метрики и результаты кампаний.',
+    docs:[
+      {name:'Отчёт продажи апрель 2026',ext:'md',icon:'📈',date:'05 мая 2026'},
+      {name:'Воронка лидов Q1 2026',ext:'xlsx',icon:'🔽',date:'01 апр 2026'},
+      {name:'Эффективность рекламы Instagram',ext:'md',icon:'📊',date:'25 мар 2026'},
+      {name:'NPS клиентов 2025',ext:'md',icon:'⭐',date:'15 янв 2026'},
+      {name:'Dashboard KPI Q1 2026',ext:'xlsx',icon:'📉',date:'01 апр 2026'},
+    ]
+  },
+  onboarding: {
+    icon:'🚀', title:'07 · Онбординг',
+    desc:'Всё необходимое для быстрого старта нового сотрудника: Welcome Book, гайды по ролям, корпоративные правила.',
+    docs:[
+      {name:'Welcome Book BeautyProf 2026',ext:'pdf',icon:'📖',date:'01 мая 2026'},
+      {name:'Гайд нового менеджера продаж',ext:'md',icon:'💼',date:'15 апр 2026'},
+      {name:'Гайд нового маркетолога',ext:'md',icon:'📣',date:'15 апр 2026'},
+      {name:'Quickstart: первая неделя',ext:'md',icon:'⚡',date:'10 апр 2026'},
+      {name:'Корпоративные правила и этика',ext:'pdf',icon:'📜',date:'01 янв 2026'},
+      {name:'Чек-лист онбординга',ext:'md',icon:'✅',date:'01 апр 2026'},
+    ]
+  },
+  ai: {
+    icon:'🤖', title:'08 · AI Context',
+    desc:'Структурированные файлы с выжимками знаний о компании для работы с Claude и другими AI-инструментами.',
+    docs:[
+      {name:'company_profile',ext:'md',icon:'🏢',date:'05 мая 2026'},
+      {name:'brand_guidelines',ext:'md',icon:'🎨',date:'01 мая 2026'},
+      {name:'products',ext:'md',icon:'💄',date:'28 апр 2026'},
+      {name:'target_audience',ext:'md',icon:'🎯',date:'25 апр 2026'},
+      {name:'sales_context',ext:'md',icon:'🤝',date:'20 апр 2026'},
+      {name:'competitors',ext:'md',icon:'🔍',date:'15 апр 2026'},
+      {name:'tone_of_voice',ext:'md',icon:'🗣️',date:'10 апр 2026'},
+      {name:'strategy_summary',ext:'md',icon:'📋',date:'01 апр 2026'},
+    ]
+  },
+  contracts: {
+    icon:'📝', title:'09 · Договоры',
+    desc:'Шаблоны договоров, актов, соглашений и юридических документов.',
+    docs:[
+      {name:'Шаблон договора поставки',ext:'docx',icon:'📋',date:'01 мар 2026'},
+      {name:'Шаблон акта приёма-передачи',ext:'docx',icon:'✅',date:'01 мар 2026'},
+      {name:'Шаблон договора рассрочки',ext:'docx',icon:'🏦',date:'01 мар 2026'},
+      {name:'NDA — соглашение о конфиденциальности',ext:'docx',icon:'🔒',date:'01 янв 2026'},
+    ]
+  },
+  brand: {
+    icon:'✨', title:'10 · Бренд-материалы',
+    desc:'Брендбук, логотипы, фирменный стиль, шаблоны дизайна для всех каналов.',
+    docs:[
+      {name:'Брендбук BeautyProf 2026',ext:'pdf',icon:'🎨',date:'01 янв 2026'},
+      {name:'Логотипы PNG + SVG',ext:'pdf',icon:'🖼️',date:'01 янв 2026'},
+      {name:'Фирменные цвета и шрифты',ext:'md',icon:'🎨',date:'01 янв 2026'},
+      {name:'Шаблоны Stories Instagram',ext:'pdf',icon:'📱',date:'15 янв 2026'},
+      {name:'Шаблоны баннеров',ext:'pdf',icon:'🖼️',date:'15 янв 2026'},
+      {name:'Tone of Voice — гайд',ext:'md',icon:'🗣️',date:'01 янв 2026'},
+    ]
+  },
+  operations: {
+    icon:'⚙️', title:'11 · Операции',
+    desc:'Внутренние регламенты, операционные процессы, чек-листы и инструкции.',
+    docs:[
+      {name:'Регламент работы с CRM',ext:'md',icon:'💻',date:'01 мая 2026'},
+      {name:'Чек-лист онбординга клиента',ext:'md',icon:'✅',date:'20 апр 2026'},
+      {name:'Процесс согласования скидок',ext:'md',icon:'💬',date:'10 апр 2026'},
+      {name:'Регламент складского учёта',ext:'md',icon:'📦',date:'01 апр 2026'},
+      {name:'Процедура возврата оборудования',ext:'md',icon:'↩️',date:'01 мар 2026'},
+    ]
+  }
+};
+
+const ALL_DOCS = [];
+Object.entries(SECTIONS).forEach(([key, sec]) => {
+  sec.docs.forEach(doc => ALL_DOCS.push({...doc, section:key, sectionTitle:sec.title, sectionIcon:sec.icon}));
+});
+
+// ── Theme ──
+const html = document.documentElement;
+const themeBtn = document.getElementById('themeBtn');
+
+function applyTheme(theme) {
+  html.setAttribute('data-theme', theme);
+  themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  themeBtn.title = theme === 'dark' ? 'Светлая тема' : 'Тёмная тема';
+  localStorage.setItem('bp-theme', theme);
+}
+
+function toggleTheme() {
+  applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+}
+
+// restore saved theme
+applyTheme(localStorage.getItem('bp-theme') || 'dark');
+
+// ── Navigation ──
+let currentView = 'dashboard';
+
+function setActiveNav(el) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  currentView = name;
+}
+
+function showDashboard(el) {
+  setActiveNav(el || document.querySelector('.nav-item'));
+  document.getElementById('pageTitle').textContent = 'Дашборд';
+  document.getElementById('searchInput').value = '';
+  showView('dashboard');
+}
+
+function showSection(key, navEl) {
+  const sec = SECTIONS[key];
+  if (!sec) return;
+  setActiveNav(navEl);
+  document.getElementById('pageTitle').textContent = sec.title;
+  document.getElementById('breadcrumbCurrent').textContent = sec.title;
+  document.getElementById('sectionHeroIcon').textContent = sec.icon;
+  document.getElementById('sectionHeroTitle').textContent = sec.title;
+  document.getElementById('sectionHeroDesc').textContent = sec.desc;
+  document.getElementById('sectionDocCount').textContent = sec.docs.length;
+  document.getElementById('sectionDocGrid').innerHTML = sec.docs.map(doc => `
+    <div class="doc-card">
+      <div class="doc-card-icon">${doc.icon}</div>
+      <div class="doc-card-name">${doc.name}</div>
+      <div class="doc-card-meta">${doc.date}</div>
+      <div class="doc-card-ext ${doc.ext}">.${doc.ext}</div>
+    </div>
+  `).join('');
+  showView('section');
+}
+
+function handleSearch(query) {
+  const q = query.trim().toLowerCase();
+  if (!q) { if (currentView === 'search') showDashboard(null); return; }
+
+  const results = ALL_DOCS.filter(d =>
+    d.name.toLowerCase().includes(q) || d.sectionTitle.toLowerCase().includes(q)
+  );
+
+  setActiveNav(null);
+  document.getElementById('pageTitle').textContent = 'Поиск';
+  document.getElementById('searchHeader').innerHTML =
+    `Найдено <strong>${results.length}</strong> документов по запросу «<strong>${query}</strong>»`;
+
+  const hi = t => t.replace(new RegExp(`(${q})`, 'gi'), '<mark>$1</mark>');
+  document.getElementById('searchResults').innerHTML = results.length === 0
+    ? `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">Ничего не найдено.</div></div>`
+    : `<div class="panel"><div class="doc-list">${results.map(d => `
+        <div class="doc-item" onclick="showSection('${d.section}',null)">
+          <div class="doc-type ${d.ext}">${d.icon}</div>
+          <div class="doc-info">
+            <div class="doc-name">${hi(d.name)}</div>
+            <div class="doc-meta">${d.sectionIcon} ${hi(d.sectionTitle)} · ${d.date}</div>
+          </div>
+          <span class="doc-tag tag-strat">.${d.ext}</span>
+        </div>`).join('')}</div></div>`;
+
+  showView('search');
+}
+</script>
+</body>
+</html>
