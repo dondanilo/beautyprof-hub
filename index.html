@@ -451,6 +451,78 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* ── CRM VIEW ── */
+  .crm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .crm-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+
+  /* Воронка */
+  .funnel-wrap { padding: 20px; }
+  .funnel-stage {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 10px;
+  }
+  .funnel-label { font-size: 12px; color: var(--text-muted); width: 160px; flex-shrink: 0; }
+  .funnel-bar-wrap { flex: 1; background: var(--dark3); border-radius: 6px; overflow: hidden; height: 28px; position: relative; }
+  .funnel-bar {
+    height: 100%; border-radius: 6px;
+    display: flex; align-items: center; padding-left: 10px;
+    font-size: 11px; font-weight: 600; color: #fff;
+    transition: width 0.6s ease;
+  }
+  .funnel-count { font-size: 12px; color: var(--text-muted); width: 60px; text-align: right; flex-shrink: 0; }
+  .funnel-amount { font-size: 11px; color: var(--gold); width: 90px; text-align: right; flex-shrink: 0; }
+
+  /* Источники */
+  .source-list { padding: 8px 0; }
+  .source-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .source-item:last-child { border-bottom: none; }
+  .source-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .source-name { font-size: 13px; flex: 1; }
+  .source-bar-wrap { width: 100px; background: var(--dark3); border-radius: 4px; height: 6px; overflow: hidden; }
+  .source-bar { height: 100%; border-radius: 4px; }
+  .source-count { font-size: 12px; font-weight: 600; color: var(--text); width: 30px; text-align: right; }
+  .source-pct { font-size: 11px; color: var(--text-muted); width: 36px; text-align: right; }
+
+  /* Лента лидов */
+  .lead-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 20px; border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .lead-item:last-child { border-bottom: none; }
+  .lead-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0; color: #fff;
+  }
+  .lead-info { flex: 1; min-width: 0; }
+  .lead-name { font-size: 13px; font-weight: 500; }
+  .lead-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .lead-status {
+    font-size: 10px; font-weight: 600; padding: 3px 9px;
+    border-radius: 20px; flex-shrink: 0;
+  }
+  .s-new    { background: rgba(91,155,213,0.15); color: #5B9BD5; }
+  .s-work   { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .s-hot    { background: rgba(228,80,80,0.15);  color: #E45050; }
+  .s-done   { background: rgba(76,175,130,0.15); color: #4CAF82; }
+  .s-miss   { background: rgba(150,150,150,0.12); color: var(--text-muted); }
+  .lead-time { font-size: 11px; color: var(--text-muted); width: 54px; text-align: right; flex-shrink: 0; }
+
+  /* Алерт */
+  .crm-alert {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(228,80,80,0.08); border: 1px solid rgba(228,80,80,0.2);
+    border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .crm-alert-icon { font-size: 20px; flex-shrink: 0; }
+  .crm-alert strong { color: #E45050; }
+
   .roistat-row {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
@@ -488,6 +560,7 @@
     <div class="nav-item" onclick="showSection('marketing',this)"><span class="nav-icon">📣</span> Маркетинг <span class="nav-badge">10</span></div>
     <div class="nav-item" onclick="showSection('analytics',this)"><span class="nav-icon">📊</span> Аналитика <span class="nav-badge">5</span></div>
     <div class="nav-item" onclick="showRoistat(this)"><span class="nav-icon">📈</span> Roistat Live</div>
+    <div class="nav-item" onclick="showCRM(this)"><span class="nav-icon">🧲</span> CRM · Лиды <span class="nav-badge" style="background:rgba(228,80,80,0.15);color:#E45050">7</span></div>
     <div class="nav-item" onclick="showSection('onboarding',this)"><span class="nav-icon">🚀</span> Онбординг <span class="nav-badge">6</span></div>
     <div class="nav-item" onclick="showSection('ai',this)"><span class="nav-icon">🤖</span> AI Context <span class="nav-badge">8</span></div>
     <div class="nav-item" onclick="showSection('contracts',this)"><span class="nav-icon">📝</span> Договоры <span class="nav-badge">4</span></div>
@@ -770,6 +843,208 @@
       </div>
     </div>
 
+    <!-- CRM VIEW -->
+    <div class="view" id="view-crm">
+
+      <!-- Алерт необработанные -->
+      <div class="crm-alert">
+        <div class="crm-alert-icon">🔴</div>
+        <div><strong>7 лидов не обработаны</strong> — ожидают ответа более 2 часов. Самый долгий: <strong>5 ч 14 мин</strong></div>
+        <a href="#" target="_blank" class="btn btn-outline" style="margin-left:auto;font-size:12px;padding:6px 12px;text-decoration:none;flex-shrink:0">Открыть в Битрикс →</a>
+      </div>
+
+      <!-- KPI строка -->
+      <div class="stats-row" style="margin-bottom:20px">
+        <div class="stat-card">
+          <div class="stat-value" style="color:#5B9BD5">18</div>
+          <div class="stat-label">Новых лидов сегодня</div>
+          <div class="stat-icon">📥</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:#4CAF82">94</div>
+          <div class="stat-label">Лидов за месяц</div>
+          <div class="stat-icon">📆</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:#E45050">7</div>
+          <div class="stat-label">Не обработаны</div>
+          <div class="stat-icon">⏳</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:var(--gold)">38 мин</div>
+          <div class="stat-label">Среднее время ответа</div>
+          <div class="stat-icon">⚡</div>
+        </div>
+      </div>
+
+      <div class="crm-grid" style="margin-bottom:20px">
+
+        <!-- Воронка -->
+        <div class="panel">
+          <div class="panel-header">🔽 Воронка сделок · май 2026</div>
+          <div class="funnel-wrap">
+            <div class="funnel-stage">
+              <div class="funnel-label">Новый лид</div>
+              <div class="funnel-bar-wrap">
+                <div class="funnel-bar" style="width:100%;background:linear-gradient(90deg,#5B9BD5,#7BB8E8)">94</div>
+              </div>
+              <div class="funnel-amount">—</div>
+            </div>
+            <div class="funnel-stage">
+              <div class="funnel-label">Взят в работу</div>
+              <div class="funnel-bar-wrap">
+                <div class="funnel-bar" style="width:75%;background:linear-gradient(90deg,#7B6ED5,#9B8EF5)">71</div>
+              </div>
+              <div class="funnel-amount">—</div>
+            </div>
+            <div class="funnel-stage">
+              <div class="funnel-label">КП отправлено</div>
+              <div class="funnel-bar-wrap">
+                <div class="funnel-bar" style="width:48%;background:linear-gradient(90deg,var(--gold),var(--gold-light))">45</div>
+              </div>
+              <div class="funnel-amount">₸ 18.4 млн</div>
+            </div>
+            <div class="funnel-stage">
+              <div class="funnel-label">Переговоры</div>
+              <div class="funnel-bar-wrap">
+                <div class="funnel-bar" style="width:28%;background:linear-gradient(90deg,#E4904C,#F0A86A)">26</div>
+              </div>
+              <div class="funnel-amount">₸ 11.2 млн</div>
+            </div>
+            <div class="funnel-stage">
+              <div class="funnel-label">Сделка закрыта</div>
+              <div class="funnel-bar-wrap">
+                <div class="funnel-bar" style="width:14%;background:linear-gradient(90deg,#4CAF82,#6DCFA0)">13</div>
+              </div>
+              <div class="funnel-amount" style="color:#4CAF82">₸ 5.8 млн</div>
+            </div>
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px">
+              <span style="color:var(--text-muted)">Конверсия лид → сделка</span>
+              <span style="color:var(--gold);font-weight:600">13.8%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Источники лидов -->
+        <div class="panel">
+          <div class="panel-header">📡 Источники лидов · май 2026</div>
+          <div class="source-list">
+            <div class="source-item">
+              <div class="source-dot" style="background:#E1306C"></div>
+              <div class="source-name">Instagram</div>
+              <div class="source-bar-wrap"><div class="source-bar" style="width:100%;background:#E1306C"></div></div>
+              <div class="source-count">32</div>
+              <div class="source-pct">34%</div>
+            </div>
+            <div class="source-item">
+              <div class="source-dot" style="background:#25D366"></div>
+              <div class="source-name">WhatsApp</div>
+              <div class="source-bar-wrap"><div class="source-bar" style="width:75%;background:#25D366"></div></div>
+              <div class="source-count">24</div>
+              <div class="source-pct">26%</div>
+            </div>
+            <div class="source-item">
+              <div class="source-dot" style="background:#4285F4"></div>
+              <div class="source-name">Google Ads</div>
+              <div class="source-bar-wrap"><div class="source-bar" style="width:56%;background:#4285F4"></div></div>
+              <div class="source-count">18</div>
+              <div class="source-pct">19%</div>
+            </div>
+            <div class="source-item">
+              <div class="source-dot" style="background:#FF0000"></div>
+              <div class="source-name">Яндекс.Директ</div>
+              <div class="source-bar-wrap"><div class="source-bar" style="width:31%;background:#FF0000"></div></div>
+              <div class="source-count">10</div>
+              <div class="source-pct">11%</div>
+            </div>
+            <div class="source-item">
+              <div class="source-dot" style="background:#5B9BD5"></div>
+              <div class="source-name">Сайт / Органика</div>
+              <div class="source-bar-wrap"><div class="source-bar" style="width:25%;background:#5B9BD5"></div></div>
+              <div class="source-count">8</div>
+              <div class="source-pct">8%</div>
+            </div>
+            <div class="source-item">
+              <div class="source-dot" style="background:var(--text-muted)"></div>
+              <div class="source-name">Другое / Реком.</div>
+              <div class="source-bar-wrap"><div class="source-bar" style="width:6%;background:var(--text-muted)"></div></div>
+              <div class="source-count">2</div>
+              <div class="source-pct">2%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Лента лидов -->
+      <div class="section-title">🕐 Последние лиды</div>
+      <div class="panel">
+        <div class="lead-item">
+          <div class="lead-avatar" style="background:#E1306C">АС</div>
+          <div class="lead-info">
+            <div class="lead-name">Айгуль Сейткали</div>
+            <div class="lead-sub">Открытие салона · Алматы · Instagram</div>
+          </div>
+          <span class="lead-status s-hot">🔥 Горячий</span>
+          <div class="lead-time">12 мин</div>
+        </div>
+        <div class="lead-item">
+          <div class="lead-avatar" style="background:#4285F4">ДМ</div>
+          <div class="lead-info">
+            <div class="lead-name">Диас Мухамедов</div>
+            <div class="lead-sub">SPA-оборудование · Астана · Google Ads</div>
+          </div>
+          <span class="lead-status s-work">В работе</span>
+          <div class="lead-time">43 мин</div>
+        </div>
+        <div class="lead-item">
+          <div class="lead-avatar" style="background:#25D366">ЗН</div>
+          <div class="lead-info">
+            <div class="lead-name">Зарина Нурланова</div>
+            <div class="lead-sub">Косметологический кабинет · Алматы · WhatsApp</div>
+          </div>
+          <span class="lead-status s-new">Новый</span>
+          <div class="lead-time">1 ч</div>
+        </div>
+        <div class="lead-item">
+          <div class="lead-avatar" style="background:#7B6ED5">МА</div>
+          <div class="lead-info">
+            <div class="lead-name">Марина Ахметова</div>
+            <div class="lead-sub">Салон под ключ · Шымкент · Яндекс</div>
+          </div>
+          <span class="lead-status s-miss">⚠️ Нет ответа</span>
+          <div class="lead-time">3 ч</div>
+        </div>
+        <div class="lead-item">
+          <div class="lead-avatar" style="background:#4CAF82">КБ</div>
+          <div class="lead-info">
+            <div class="lead-name">Камила Байжанова</div>
+            <div class="lead-sub">Лазерное оборудование · Алматы · Instagram</div>
+          </div>
+          <span class="lead-status s-done">✓ Сделка</span>
+          <div class="lead-time">5 ч</div>
+        </div>
+        <div class="lead-item">
+          <div class="lead-avatar" style="background:#E4904C">РС</div>
+          <div class="lead-info">
+            <div class="lead-name">Руслан Сатыбалды</div>
+            <div class="lead-sub">Мебель для барбершопа · Астана · Сайт</div>
+          </div>
+          <span class="lead-status s-miss">⚠️ Нет ответа</span>
+          <div class="lead-time">5 ч 14 мин</div>
+        </div>
+        <div class="lead-item" style="border-bottom:none">
+          <div class="lead-avatar" style="background:#5B9BD5">НО</div>
+          <div class="lead-info">
+            <div class="lead-name">Назгуль Оспанова</div>
+            <div class="lead-sub">Аппараты для косметологии · Алматы · WhatsApp</div>
+          </div>
+          <span class="lead-status s-work">В работе</span>
+          <div class="lead-time">6 ч</div>
+        </div>
+      </div>
+
+    </div>
+
     <!-- SEARCH VIEW -->
     <div class="view" id="view-search">
       <div class="search-header" id="searchHeader"></div>
@@ -983,6 +1258,13 @@ function showSection(key, navEl) {
     </div>
   `).join('');
   showView('section');
+}
+
+function showCRM(el) {
+  setActiveNav(el);
+  document.getElementById('pageTitle').textContent = 'CRM · Лиды';
+  document.getElementById('searchInput').value = '';
+  showView('crm');
 }
 
 function showRoistat(el) {
