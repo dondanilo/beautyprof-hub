@@ -598,157 +598,240 @@
 
     <!-- DASHBOARD -->
     <div class="view active" id="view-dashboard">
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-value">71</div>
-          <div class="stat-label">Всего документов</div>
-          <div class="stat-icon">📄</div>
+
+      <!-- АЛЕРТ -->
+      <div class="crm-alert" style="margin-bottom:18px">
+        <div class="crm-alert-icon">🔴</div>
+        <div><strong>7 лидов не обработаны</strong> — ожидают ответа более 2 часов. Самый долгий: <strong>5 ч 14 мин</strong></div>
+        <div onclick="showCRM(null)" class="btn btn-outline" style="margin-left:auto;font-size:12px;padding:6px 12px;cursor:pointer;flex-shrink:0">Смотреть лиды →</div>
+      </div>
+
+      <!-- KPI с прогрессом -->
+      <div class="stats-row" style="margin-bottom:18px">
+        <div class="stat-card" style="cursor:pointer" onclick="showCRM(null)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between">
+            <div>
+              <div class="stat-value">₸8.7M</div>
+              <div class="stat-label">Выручка · май 2026</div>
+            </div>
+            <span style="font-size:11px;background:rgba(76,175,130,0.15);color:#4CAF82;padding:3px 8px;border-radius:20px;font-weight:600;margin-top:2px">↑ +12%</span>
+          </div>
+          <div style="margin-top:12px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-bottom:5px"><span>факт</span><span>план ₸15M</span></div>
+            <div style="background:var(--dark3);border-radius:4px;height:6px;overflow:hidden">
+              <div style="width:58%;height:100%;background:linear-gradient(90deg,#4CAF82,#6DCFA0);border-radius:4px"></div>
+            </div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:4px">58% плана</div>
+          </div>
+        </div>
+        <div class="stat-card" style="cursor:pointer" onclick="showCRM(null)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between">
+            <div>
+              <div class="stat-value">94</div>
+              <div class="stat-label">Лиды · май 2026</div>
+            </div>
+            <span style="font-size:11px;background:rgba(91,155,213,0.15);color:#5B9BD5;padding:3px 8px;border-radius:20px;font-weight:600;margin-top:2px">↑ +8%</span>
+          </div>
+          <div style="margin-top:12px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-bottom:5px"><span>факт</span><span>план 120</span></div>
+            <div style="background:var(--dark3);border-radius:4px;height:6px;overflow:hidden">
+              <div style="width:78%;height:100%;background:linear-gradient(90deg,#5B9BD5,#7BB8E8);border-radius:4px"></div>
+            </div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:4px">78% плана</div>
+          </div>
         </div>
         <div class="stat-card">
-          <div class="stat-value">11</div>
-          <div class="stat-label">Разделов</div>
-          <div class="stat-icon">📁</div>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between">
+            <div>
+              <div class="stat-value">13.8%</div>
+              <div class="stat-label">Конверсия лид → сделка</div>
+            </div>
+            <span style="font-size:11px;background:rgba(201,168,76,0.15);color:var(--gold);padding:3px 8px;border-radius:20px;font-weight:600;margin-top:2px">↑ +2.6%</span>
+          </div>
+          <div style="margin-top:12px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-bottom:5px"><span>текущий</span><span>цель 18%</span></div>
+            <div style="background:var(--dark3);border-radius:4px;height:6px;overflow:hidden">
+              <div style="width:77%;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:4px"></div>
+            </div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:4px">было 11.2% в апреле</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-value">3</div>
-          <div class="stat-label">Обновлений за неделю</div>
-          <div class="stat-icon">🔄</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">2</div>
-          <div class="stat-label">Города присутствия</div>
-          <div class="stat-icon">📍</div>
+        <div class="stat-card" style="cursor:pointer" onclick="showCRM(null)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between">
+            <div>
+              <div class="stat-value">18</div>
+              <div class="stat-label">Новых лидов сегодня</div>
+            </div>
+            <span style="font-size:11px;background:rgba(228,80,80,0.12);color:#E45050;padding:3px 8px;border-radius:20px;font-weight:600;margin-top:2px">7 ждут</span>
+          </div>
+          <div style="margin-top:12px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-bottom:5px"><span>среднее время ответа</span></div>
+            <div style="font-size:18px;font-weight:700;color:var(--text-muted)">38 <span style="font-size:12px">мин</span></div>
+          </div>
         </div>
       </div>
 
-      <div class="section-title">
-        Разделы хаба <span class="section-title-badge">11 разделов</span>
-      </div>
+      <!-- СРЕДНЯЯ СТРОКА: воронка + источники + маркетинг -->
+      <div style="display:grid;grid-template-columns:1.1fr 1fr 0.9fr;gap:16px;margin-bottom:18px">
 
-      <div class="sections-grid">
-        <div class="section-card" onclick="showSection('strategy',null)">
-          <div class="section-card-icon">🎯</div>
-          <div class="section-card-name">01 · Стратегия</div>
-          <div class="section-card-desc">Позиционирование, цели компании, конкурентный анализ</div>
-          <div class="section-card-footer"><div class="doc-count"><span>4</span> документа</div><div class="arrow">→</div></div>
-        </div>
-        <div class="section-card" onclick="showSection('knowledge',null)">
-          <div class="section-card-icon">📚</div>
-          <div class="section-card-name">02 · База знаний</div>
-          <div class="section-card-desc">Клиенты, аудитории, продукты, поставщики, команда</div>
-          <div class="section-card-footer"><div class="doc-count"><span>12</span> документов</div><div class="arrow">→</div></div>
-        </div>
-        <div class="section-card" onclick="showSection('budget',null)">
-          <div class="section-card-icon">💰</div>
-          <div class="section-card-name">03 · Бюджеты</div>
-          <div class="section-card-desc">Финансовое планирование и расходы по направлениям</div>
-          <div class="section-card-footer"><div class="doc-count"><span>3</span> документа</div><div class="arrow">→</div></div>
-        </div>
-        <div class="section-card" onclick="showSection('sales',null)">
-          <div class="section-card-icon">🤝</div>
-          <div class="section-card-name">04 · Продажи</div>
-          <div class="section-card-desc">Скрипты, КП, работа с возражениями, прайсы</div>
-          <div class="section-card-footer"><div class="doc-count"><span>8</span> документов</div><div class="arrow">→</div></div>
-        </div>
-        <div class="section-card" onclick="showSection('marketing',null)">
-          <div class="section-card-icon">📣</div>
-          <div class="section-card-name">05 · Маркетинг</div>
-          <div class="section-card-desc">Кампании, контент, соцсети, шаблоны рассылок</div>
-          <div class="section-card-footer"><div class="doc-count"><span>10</span> документов</div><div class="arrow">→</div></div>
-        </div>
-        <div class="section-card" onclick="showSection('analytics',null)">
-          <div class="section-card-icon">📊</div>
-          <div class="section-card-name">06 · Аналитика</div>
-          <div class="section-card-desc">Отчёты по продажам, воронка лидов, метрики</div>
-          <div class="section-card-footer"><div class="doc-count"><span>5</span> документов</div><div class="arrow">→</div></div>
-        </div>
-        <div class="section-card" onclick="showSection('onboarding',null)">
-          <div class="section-card-icon">🚀</div>
-          <div class="section-card-name">07 · Онбординг</div>
-          <div class="section-card-desc">Welcome Book, гайды для новых сотрудников по ролям</div>
-          <div class="section-card-footer"><div class="doc-count"><span>6</span> документов</div><div class="arrow">→</div></div>
-        </div>
-        <div class="section-card" onclick="showSection('ai',null)">
-          <div class="section-card-icon">🤖</div>
-          <div class="section-card-name">08 · AI Context</div>
-          <div class="section-card-desc">Структурированные данные о компании для AI-инструментов</div>
-          <div class="section-card-footer"><div class="doc-count"><span>8</span> документов</div><div class="arrow">→</div></div>
-        </div>
-        <div class="section-card" onclick="showSection('contracts',null)">
-          <div class="section-card-icon">📝</div>
-          <div class="section-card-name">09 · Договоры</div>
-          <div class="section-card-desc">Шаблоны договоров, актов и соглашений</div>
-          <div class="section-card-footer"><div class="doc-count"><span>4</span> документа</div><div class="arrow">→</div></div>
-        </div>
-        <div class="section-card" onclick="showSection('brand',null)">
-          <div class="section-card-icon">✨</div>
-          <div class="section-card-name">10 · Бренд</div>
-          <div class="section-card-desc">Брендбук, логотипы, фирменный стиль, гайдлайны</div>
-          <div class="section-card-footer"><div class="doc-count"><span>6</span> документов</div><div class="arrow">→</div></div>
-        </div>
-        <div class="section-card" onclick="showSection('operations',null)">
-          <div class="section-card-icon">⚙️</div>
-          <div class="section-card-name">11 · Операции</div>
-          <div class="section-card-desc">Регламенты, процессы, чек-листы, работа с CRM</div>
-          <div class="section-card-footer"><div class="doc-count"><span>5</span> документов</div><div class="arrow">→</div></div>
-        </div>
-      </div>
-
-      <div class="grid-2col">
+        <!-- Воронка -->
         <div class="panel">
-          <div class="panel-header">📄 Последние документы</div>
-          <div class="doc-item">
-            <div class="doc-type md">📝</div>
-            <div class="doc-info">
-              <div class="doc-name">Скрипт холодного звонка — Алматы</div>
-              <div class="doc-meta">04_Sales / Scripts · 2 дня назад</div>
-            </div>
-            <span class="doc-tag tag-sales">Продажи</span>
+          <div class="panel-header" style="display:flex;justify-content:space-between;align-items:center">
+            <span>🔽 Воронка продаж</span>
+            <span onclick="showCRM(null)" style="font-size:11px;color:var(--gold);cursor:pointer">подробнее →</span>
           </div>
-          <div class="doc-item">
-            <div class="doc-type md">📝</div>
-            <div class="doc-info">
-              <div class="doc-name">Контент-план Instagram май 2026</div>
-              <div class="doc-meta">05_Marketing / Content · 3 дня назад</div>
+          <div style="padding:16px 20px">
+            <div style="margin-bottom:9px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:4px"><span>Новый лид</span><span style="color:var(--text);font-weight:600">94</span></div>
+              <div style="background:var(--dark3);border-radius:4px;height:8px;overflow:hidden"><div style="width:100%;height:100%;background:#5B9BD5;border-radius:4px"></div></div>
             </div>
-            <span class="doc-tag tag-mkt">Маркетинг</span>
-          </div>
-          <div class="doc-item">
-            <div class="doc-type pdf">📄</div>
-            <div class="doc-info">
-              <div class="doc-name">Welcome Book BeautyProf 2026</div>
-              <div class="doc-meta">07_Onboarding · 5 дней назад</div>
+            <div style="margin-bottom:9px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:4px"><span>Взят в работу</span><span style="color:var(--text);font-weight:600">71</span></div>
+              <div style="background:var(--dark3);border-radius:4px;height:8px;overflow:hidden"><div style="width:75%;height:100%;background:#7B6ED5;border-radius:4px"></div></div>
             </div>
-            <span class="doc-tag tag-hr">HR</span>
-          </div>
-          <div class="doc-item">
-            <div class="doc-type xlsx">📊</div>
-            <div class="doc-info">
-              <div class="doc-name">Прайс-лист оборудование Q2 2026</div>
-              <div class="doc-meta">04_Sales / Pricing · 1 неделю назад</div>
+            <div style="margin-bottom:9px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:4px"><span>КП отправлено</span><span style="color:var(--text);font-weight:600">45</span></div>
+              <div style="background:var(--dark3);border-radius:4px;height:8px;overflow:hidden"><div style="width:48%;height:100%;background:var(--gold);border-radius:4px"></div></div>
             </div>
-            <span class="doc-tag tag-sales">Продажи</span>
-          </div>
-          <div class="doc-item">
-            <div class="doc-type md">📝</div>
-            <div class="doc-info">
-              <div class="doc-name">Стратегия BeautyProf 2026</div>
-              <div class="doc-meta">01_Strategy · 1 неделю назад</div>
+            <div style="margin-bottom:9px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:4px"><span>Переговоры</span><span style="color:var(--text);font-weight:600">26</span></div>
+              <div style="background:var(--dark3);border-radius:4px;height:8px;overflow:hidden"><div style="width:28%;height:100%;background:#E4904C;border-radius:4px"></div></div>
             </div>
-            <span class="doc-tag tag-strat">Стратегия</span>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:4px"><span>Закрыта ✓</span><span style="color:#4CAF82;font-weight:600">13</span></div>
+              <div style="background:var(--dark3);border-radius:4px;height:8px;overflow:hidden"><div style="width:14%;height:100%;background:#4CAF82;border-radius:4px"></div></div>
+            </div>
+            <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:11px;color:var(--text-muted)">Пайплайн</span>
+              <span style="font-size:14px;font-weight:700;color:var(--gold)">₸11.2M</span>
+            </div>
           </div>
         </div>
 
-        <div>
-          <div class="section-title" style="margin-bottom:12px">⚡ Быстрый доступ</div>
-          <div class="quick-links">
-            <div class="quick-link" onclick="showSection('onboarding',null)"><span>🚀</span> Welcome Book нового сотрудника</div>
-            <div class="quick-link" onclick="showSection('sales',null)"><span>📞</span> Скрипты продаж</div>
-            <div class="quick-link" onclick="showSection('marketing',null)"><span>💬</span> Шаблоны WhatsApp-рассылок</div>
-            <div class="quick-link" onclick="showSection('knowledge',null)"><span>💄</span> Каталог оборудования</div>
-            <div class="quick-link" onclick="showSection('ai',null)"><span>🤖</span> AI-контекст компании</div>
+        <!-- Источники лидов -->
+        <div class="panel">
+          <div class="panel-header" style="display:flex;justify-content:space-between;align-items:center">
+            <span>📡 Источники лидов</span>
+            <span onclick="showRoistat(null)" style="font-size:11px;color:var(--gold);cursor:pointer">Roistat →</span>
+          </div>
+          <div style="padding:12px 0">
+            <div class="source-item">
+              <div class="source-dot" style="background:#E1306C"></div>
+              <div class="source-name">Instagram</div>
+              <div class="source-bar-wrap"><div class="source-bar" style="width:100%;background:#E1306C"></div></div>
+              <div class="source-count">32</div><div class="source-pct">34%</div>
+            </div>
+            <div class="source-item">
+              <div class="source-dot" style="background:#25D366"></div>
+              <div class="source-name">WhatsApp</div>
+              <div class="source-bar-wrap"><div class="source-bar" style="width:75%;background:#25D366"></div></div>
+              <div class="source-count">24</div><div class="source-pct">26%</div>
+            </div>
+            <div class="source-item">
+              <div class="source-dot" style="background:#4285F4"></div>
+              <div class="source-name">Google Ads</div>
+              <div class="source-bar-wrap"><div class="source-bar" style="width:56%;background:#4285F4"></div></div>
+              <div class="source-count">18</div><div class="source-pct">19%</div>
+            </div>
+            <div class="source-item">
+              <div class="source-dot" style="background:#FF0000"></div>
+              <div class="source-name">Яндекс.Директ</div>
+              <div class="source-bar-wrap"><div class="source-bar" style="width:31%;background:#FF0000"></div></div>
+              <div class="source-count">10</div><div class="source-pct">11%</div>
+            </div>
+            <div class="source-item" style="border-bottom:none">
+              <div class="source-dot" style="background:#5B9BD5"></div>
+              <div class="source-name">Сайт / Органика</div>
+              <div class="source-bar-wrap"><div class="source-bar" style="width:25%;background:#5B9BD5"></div></div>
+              <div class="source-count">8</div><div class="source-pct">8%</div>
+            </div>
           </div>
         </div>
+
+        <!-- Маркетинг -->
+        <div class="panel">
+          <div class="panel-header" style="display:flex;justify-content:space-between;align-items:center">
+            <span>📣 Маркетинг</span>
+            <span onclick="showRoistat(null)" style="font-size:11px;color:var(--gold);cursor:pointer">Roistat →</span>
+          </div>
+          <div style="padding:16px 20px">
+            <div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+              <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Показы</div>
+              <div style="font-size:22px;font-weight:700">249 274</div>
+            </div>
+            <div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+              <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Визиты на сайт</div>
+              <div style="font-size:22px;font-weight:700">2 058</div>
+            </div>
+            <div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+              <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Конверсия в заявку</div>
+              <div style="font-size:22px;font-weight:700;color:#4CAF82">10.2%</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Заявок из рекламы</div>
+              <div style="font-size:22px;font-weight:700;color:var(--gold)">210</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- НИЖНЯЯ СТРОКА: лента лидов + разделы -->
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:16px">
+
+        <!-- Последние лиды -->
+        <div class="panel">
+          <div class="panel-header" style="display:flex;justify-content:space-between;align-items:center">
+            <span>🕐 Последние лиды</span>
+            <span onclick="showCRM(null)" style="font-size:11px;color:var(--gold);cursor:pointer">все лиды →</span>
+          </div>
+          <div class="lead-item">
+            <div class="lead-avatar" style="background:#E1306C">АС</div>
+            <div class="lead-info"><div class="lead-name">Айгуль Сейткали</div><div class="lead-sub">Открытие салона · Алматы · Instagram</div></div>
+            <span class="lead-status s-hot">🔥 Горячий</span>
+            <div class="lead-time">12 мин</div>
+          </div>
+          <div class="lead-item">
+            <div class="lead-avatar" style="background:#4285F4">ДМ</div>
+            <div class="lead-info"><div class="lead-name">Диас Мухамедов</div><div class="lead-sub">SPA-оборудование · Астана · Google Ads</div></div>
+            <span class="lead-status s-work">В работе</span>
+            <div class="lead-time">43 мин</div>
+          </div>
+          <div class="lead-item">
+            <div class="lead-avatar" style="background:#25D366">ЗН</div>
+            <div class="lead-info"><div class="lead-name">Зарина Нурланова</div><div class="lead-sub">Косметологический кабинет · Алматы · WA</div></div>
+            <span class="lead-status s-new">Новый</span>
+            <div class="lead-time">1 ч</div>
+          </div>
+          <div class="lead-item">
+            <div class="lead-avatar" style="background:#7B6ED5">МА</div>
+            <div class="lead-info"><div class="lead-name">Марина Ахметова</div><div class="lead-sub">Салон под ключ · Шымкент · Яндекс</div></div>
+            <span class="lead-status s-miss">⚠️ Нет ответа</span>
+            <div class="lead-time">3 ч</div>
+          </div>
+          <div class="lead-item" style="border-bottom:none">
+            <div class="lead-avatar" style="background:#4CAF82">КБ</div>
+            <div class="lead-info"><div class="lead-name">Камила Байжанова</div><div class="lead-sub">Лазерное оборудование · Алматы · Instagram</div></div>
+            <span class="lead-status s-done">✓ Сделка</span>
+            <div class="lead-time">5 ч</div>
+          </div>
+        </div>
+
+        <!-- Разделы хаба компактно -->
+        <div class="panel">
+          <div class="panel-header">📁 Разделы хаба</div>
+          <div style="padding:8px 0">
+            <div class="doc-item" onclick="showSection('strategy',null)"><span style="font-size:15px">🎯</span><span style="flex:1;font-size:13px">Стратегия</span><span style="font-size:11px;color:var(--text-muted)">4 →</span></div>
+            <div class="doc-item" onclick="showSection('sales',null)"><span style="font-size:15px">🤝</span><span style="flex:1;font-size:13px">Продажи</span><span style="font-size:11px;color:var(--text-muted)">8 →</span></div>
+            <div class="doc-item" onclick="showSection('marketing',null)"><span style="font-size:15px">📣</span><span style="flex:1;font-size:13px">Маркетинг</span><span style="font-size:11px;color:var(--text-muted)">10 →</span></div>
+            <div class="doc-item" onclick="showSection('knowledge',null)"><span style="font-size:15px">📚</span><span style="flex:1;font-size:13px">База знаний</span><span style="font-size:11px;color:var(--text-muted)">12 →</span></div>
+            <div class="doc-item" onclick="showSection('analytics',null)"><span style="font-size:15px">📊</span><span style="flex:1;font-size:13px">Аналитика</span><span style="font-size:11px;color:var(--text-muted)">5 →</span></div>
+            <div class="doc-item" onclick="showSection('onboarding',null)"><span style="font-size:15px">🚀</span><span style="flex:1;font-size:13px">Онбординг</span><span style="font-size:11px;color:var(--text-muted)">6 →</span></div>
+            <div class="doc-item" onclick="showSection('brand',null)"><span style="font-size:15px">✨</span><span style="flex:1;font-size:13px">Бренд</span><span style="font-size:11px;color:var(--text-muted)">6 →</span></div>
+            <div class="doc-item" onclick="showSection('operations',null)" style="border-bottom:none"><span style="font-size:15px">⚙️</span><span style="flex:1;font-size:13px">Операции</span><span style="font-size:11px;color:var(--text-muted)">5 →</span></div>
+          </div>
+        </div>
+
       </div>
     </div>
 
