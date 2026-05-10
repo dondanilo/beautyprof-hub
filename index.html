@@ -393,6 +393,124 @@
   .empty-icon { font-size: 40px; margin-bottom: 12px; }
   .empty-text { font-size: 14px; }
 
+  /* ── HAMBURGER ── */
+  .hamburger {
+    display: none;
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    background: var(--input-bg);
+    border-radius: 8px;
+    cursor: pointer;
+    align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .hamburger:hover { border-color: var(--gold); }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 99;
+    backdrop-filter: blur(3px);
+  }
+  .sidebar-overlay.active { display: block; }
+
+  /* ── DASHBOARD GRIDS ── */
+  .dash-mid-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 0.9fr;
+    gap: 16px; margin-bottom: 18px;
+  }
+  .dash-bot-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16px;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    body { overflow: hidden; }
+
+    /* Сайдбар — скрытый, выезжает поверх */
+    .sidebar {
+      position: fixed;
+      left: -270px; top: 0; bottom: 0;
+      z-index: 100;
+      transition: left 0.28s ease;
+      width: 260px;
+    }
+    .sidebar.mob-open {
+      left: 0;
+      box-shadow: 6px 0 32px rgba(0,0,0,0.45);
+    }
+
+    .hamburger { display: flex; }
+    .search-wrap { display: none; }
+    .btn-outline { display: none; }
+
+    .topbar { padding: 12px 16px; gap: 10px; }
+    .page-title { font-size: 14px; }
+
+    .content-area { padding: 14px 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+    /* Статы 4 → 2 колонки */
+    .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .stat-card { padding: 14px; }
+    .stat-value { font-size: 22px; }
+    .stat-icon { font-size: 18px; top: 12px; right: 12px; }
+
+    /* Алерт */
+    .crm-alert { flex-wrap: wrap; gap: 8px; }
+    .crm-alert .btn-outline { display: flex !important; width: 100%; justify-content: center; margin-left: 0 !important; }
+
+    /* Дашборд гриды → 1 колонка */
+    .dash-mid-grid { grid-template-columns: 1fr !important; }
+    .dash-bot-grid  { grid-template-columns: 1fr !important; }
+
+    /* CRM гриды → 1 колонка */
+    .crm-grid  { grid-template-columns: 1fr !important; }
+    .crm-grid-3 { grid-template-columns: 1fr !important; }
+
+    /* Карточки разделов 3→2 колонки */
+    .sections-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* Доки грид → 2 колонки */
+    .doc-grid { grid-template-columns: 1fr 1fr; }
+
+    /* Воронка: убрать лейбл-фиксированную ширину */
+    .funnel-label { width: 110px; font-size: 11px; }
+
+    /* Источники */
+    .source-bar-wrap { width: 60px; }
+
+    /* Лента лидов */
+    .lead-item { padding: 10px 14px; gap: 8px; }
+    .lead-time { display: none; }
+
+    /* Панели */
+    .panel-header { padding: 12px 16px; font-size: 12px; }
+    .doc-item { padding: 10px 14px; }
+
+    /* Section hero */
+    .section-hero { flex-direction: column; gap: 12px; padding: 18px; }
+    .section-hero-title { font-size: 17px; }
+
+    /* Grid 2col */
+    .grid-2col { grid-template-columns: 1fr; }
+
+    /* Roistat таблица — скрыть колонку расходы */
+    .roistat-row span:last-child,
+    .panel-header span:last-child { display: none; }
+    .roistat-row,
+    .panel-header { grid-template-columns: 2fr 1fr 1fr 1fr; }
+  }
+
+  @media (max-width: 400px) {
+    .stats-row { grid-template-columns: 1fr; }
+    .sections-grid { grid-template-columns: 1fr; }
+  }
+
   /* ── ROISTAT VIEW ── */
   .roistat-wrap {
     display: flex; flex-direction: column; height: 100%;
@@ -581,7 +699,10 @@
 
 <!-- MAIN -->
 <div class="main">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
   <div class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
     <div class="page-title" id="pageTitle">Дашборд</div>
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
@@ -672,7 +793,7 @@
       </div>
 
       <!-- СРЕДНЯЯ СТРОКА: воронка + источники + маркетинг -->
-      <div style="display:grid;grid-template-columns:1.1fr 1fr 0.9fr;gap:16px;margin-bottom:18px">
+      <div class="dash-mid-grid">
 
         <!-- Воронка -->
         <div class="panel">
@@ -777,7 +898,7 @@
       </div>
 
       <!-- НИЖНЯЯ СТРОКА: лента лидов + разделы -->
-      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:16px">
+      <div class="dash-bot-grid">
 
         <!-- Последние лиды -->
         <div class="panel">
@@ -1278,6 +1399,25 @@ const SECTIONS = {
 const ALL_DOCS = [];
 Object.entries(SECTIONS).forEach(([key, sec]) => {
   sec.docs.forEach(doc => ALL_DOCS.push({...doc, section:key, sectionTitle:sec.title, sectionIcon:sec.icon}));
+});
+
+// ── Mobile sidebar ──
+const sidebarEl  = document.querySelector('.sidebar');
+const overlayEl  = document.getElementById('sidebarOverlay');
+
+function toggleSidebar() {
+  sidebarEl.classList.toggle('mob-open');
+  overlayEl.classList.toggle('active');
+}
+function closeSidebar() {
+  sidebarEl.classList.remove('mob-open');
+  overlayEl.classList.remove('active');
+}
+// Закрывать сайдбар при выборе пункта на мобиле
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebar();
+  });
 });
 
 // ── Theme ──
