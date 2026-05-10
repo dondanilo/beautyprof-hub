@@ -392,6 +392,64 @@
   .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
   .empty-icon { font-size: 40px; margin-bottom: 12px; }
   .empty-text { font-size: 14px; }
+
+  /* ── ROISTAT VIEW ── */
+  .roistat-wrap {
+    display: flex; flex-direction: column; height: 100%;
+  }
+  .roistat-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .roistat-meta {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .live-badge {
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(76,175,130,0.12); color: #4CAF82;
+    border: 1px solid rgba(76,175,130,0.25);
+    font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px;
+  }
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4CAF82;
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .roistat-iframe-wrap {
+    flex: 1;
+    border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    min-height: 700px;
+    position: relative;
+  }
+  .roistat-iframe-wrap iframe {
+    width: 100%; height: 100%;
+    min-height: 700px;
+    border: none; display: block;
+  }
+  .iframe-loader {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px; color: var(--text-muted); font-size: 13px;
+    background: var(--card-bg);
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .iframe-loader.hidden { opacity: 0; }
+  .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -418,6 +476,7 @@
     <div class="nav-item" onclick="showSection('sales',this)"><span class="nav-icon">🤝</span> Продажи <span class="nav-badge">8</span></div>
     <div class="nav-item" onclick="showSection('marketing',this)"><span class="nav-icon">📣</span> Маркетинг <span class="nav-badge">10</span></div>
     <div class="nav-item" onclick="showSection('analytics',this)"><span class="nav-icon">📊</span> Аналитика <span class="nav-badge">5</span></div>
+    <div class="nav-item" onclick="showRoistat(this)"><span class="nav-icon">📈</span> Roistat Live</div>
     <div class="nav-item" onclick="showSection('onboarding',this)"><span class="nav-icon">🚀</span> Онбординг <span class="nav-badge">6</span></div>
     <div class="nav-item" onclick="showSection('ai',this)"><span class="nav-icon">🤖</span> AI Context <span class="nav-badge">8</span></div>
     <div class="nav-item" onclick="showSection('contracts',this)"><span class="nav-icon">📝</span> Договоры <span class="nav-badge">4</span></div>
@@ -629,6 +688,33 @@
       </div>
       <div class="section-title">Документы раздела</div>
       <div class="doc-grid" id="sectionDocGrid"></div>
+    </div>
+
+    <!-- ROISTAT VIEW -->
+    <div class="view" id="view-roistat">
+      <div class="roistat-wrap">
+        <div class="roistat-header">
+          <div>
+            <div class="section-title" style="margin-bottom:4px">📈 Roistat — Аналитика Live</div>
+            <div style="font-size:12px;color:var(--text-muted)">Основной отчёт · 11 апр — 10 мая 2026 · Beautyprof.kz</div>
+          </div>
+          <div class="roistat-meta">
+            <div class="live-badge"><div class="live-dot"></div> LIVE</div>
+            <a href="https://cloud.roistat.com/projects/171383/new/report/12/78716515de96cf2ae037def862571a2b?date=2026-04-11-2026-05-10&interval=1d" target="_blank" class="btn btn-outline" style="text-decoration:none;font-size:12px;padding:6px 12px;">↗ Открыть в Roistat</a>
+          </div>
+        </div>
+        <div class="roistat-iframe-wrap">
+          <div class="iframe-loader" id="iframeLoader">
+            <div class="spinner"></div>
+            <span>Загружаем данные из Roistat...</span>
+          </div>
+          <iframe
+            src="https://cloud.roistat.com/projects/171383/new/report/12/78716515de96cf2ae037def862571a2b?date=2026-04-11-2026-05-10&interval=1d"
+            onload="document.getElementById('iframeLoader').classList.add('hidden')"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
     </div>
 
     <!-- SEARCH VIEW -->
@@ -844,6 +930,14 @@ function showSection(key, navEl) {
     </div>
   `).join('');
   showView('section');
+}
+
+function showRoistat(el) {
+  setActiveNav(el);
+  document.getElementById('pageTitle').textContent = 'Roistat Live';
+  document.getElementById('searchInput').value = '';
+  document.getElementById('iframeLoader').classList.remove('hidden');
+  showView('roistat');
 }
 
 function handleSearch(query) {
